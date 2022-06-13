@@ -21,5 +21,5 @@
 + random
 + beautifulsoup4
 + requests
-###Авторы
+### Авторы
 + Бондарева Анастасия - _github.com/nastyacolfer_
