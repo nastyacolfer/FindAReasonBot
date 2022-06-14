@@ -14,6 +14,18 @@ stickers = ['CAACAgIAAxkBAAEFB35ip3HOcsGS3oG05o9XRk0QqRWhaQAC_gADVp29CtoEYTAu-df
             'CAACAgIAAxkBAAEFB4Jip3L6vR-DoRlZBNwqxQzmzKybSAACHQADwDZPE17YptxBPd5IJAQ']
 
 
+def generator(message):
+    """
+    Генерация рандомного тоста из файла tosts.txt
+    :param message:
+        Запрос пользователя
+    """
+    tosts = []
+    with open("tosts.txt", "r", encoding="utf8") as f:
+        tosts = f.read().split('\n')
+    bot.send_message(message.chat.id, tosts[random.randint(0, len(tosts)-1)])
+
+
 def reasons(date):
     """
     Парсинг сайта, url в соответствии с датой
@@ -61,6 +73,7 @@ def start(message):
     _id = message.chat.id
     keyboard = telebot.types.ReplyKeyboardMarkup(True)  # Подключение reply-кнопок
     keyboard.add('Сегодня', 'Завтра')
+    keyboard.add('Рандомный тост')
     bot.send_message(_id, "Привет! Выбери день, чтобы узнать праздники", reply_markup=keyboard)
 
 
@@ -73,15 +86,27 @@ def check(message):
     """
     keyboard = telebot.types.ReplyKeyboardMarkup(True)
     _id = message.chat.id
+    sticker = stickers[random.randint(0, len(stickers) - 1)]
     match message.text:
         case 'Сегодня':
             bot.send_message(_id, "Праздники сегодня:")
             bot.send_message(_id, reasons("today"))
+            #  Отправка стикера из коллекции
+            bot.send_sticker(_id, sticker)
         case 'Завтра':
             bot.send_message(_id, "Праздники завтра:")
             bot.send_message(_id, reasons("tomorrow"))
-    #  Отправка стикера из коллекции
-    bot.send_sticker(_id, stickers[random.randint(0, len(stickers) - 1)])
+            #  Отправка стикера из коллекции
+            bot.send_sticker(_id, sticker)
+        case 'Рандомный тост':
+            cheers = 'CAACAgIAAxkBAAEFCaliqH9myHORoHE7h-_d1gQma6WFLAACSgIAAladvQrJasZoYBh68CQE'
+            #Генерация тоста из списка
+            generator(message)
+            bot.send_sticker(_id, cheers)
+        case _:
+            ans = 'CAACAgIAAxkBAAEFCLVip8Ks7sndBPTyvMA7Q3Jq-MifQwACGAADwDZPE9b6J7-cahj4JAQ'
+            bot.send_sticker(_id, ans)
+            bot.send_message(_id, "Я тебя не понимаю :(\nЛучше нажми на кнопку!")
 
 
 #  Запуск бота
