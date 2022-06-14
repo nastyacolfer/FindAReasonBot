@@ -20,7 +20,6 @@ def generator(message):
     :param message:
         Запрос пользователя
     """
-    tosts = []
     with open("tosts.txt", "r", encoding="utf8") as f:
         tosts = f.read().split('\n')
     bot.send_message(message.chat.id, tosts[random.randint(0, len(tosts)-1)])
@@ -100,13 +99,25 @@ def check(message):
             bot.send_sticker(_id, sticker)
         case 'Рандомный тост':
             cheers = 'CAACAgIAAxkBAAEFCaliqH9myHORoHE7h-_d1gQma6WFLAACSgIAAladvQrJasZoYBh68CQE'
-            #Генерация тоста из списка
+            #  Генерация тоста из списка
             generator(message)
             bot.send_sticker(_id, cheers)
         case _:
-            ans = 'CAACAgIAAxkBAAEFCLVip8Ks7sndBPTyvMA7Q3Jq-MifQwACGAADwDZPE9b6J7-cahj4JAQ'
-            bot.send_sticker(_id, ans)
-            bot.send_message(_id, "Я тебя не понимаю :(\nЛучше нажми на кнопку!")
+            dont_get(message)
+
+
+@bot.message_handler(content_types=["audio", "document", "photo", "sticker", "video", "video_note",
+                                    "voice", "location", "contact"])
+def dont_get(message):
+    """
+    Обработка сообщения или других файлов
+    :param message:
+        Запросы помимо кнопок
+    """
+    _id = message.chat.id
+    ans = 'CAACAgIAAxkBAAEFCLVip8Ks7sndBPTyvMA7Q3Jq-MifQwACGAADwDZPE9b6J7-cahj4JAQ'
+    bot.send_sticker(_id, ans)
+    bot.send_message(_id, "Я тебя не понимаю :(\nЛучше нажми на кнопку!")
 
 
 #  Запуск бота
